@@ -1,0 +1,14 @@
+*filter
+
+{% if dr_fw_docker_iptfix_apply|default(false) == true %}
+
+:BEFORE_DOCKER - [0:0]
+
+-D FORWARD -i {{dr_fw_main_interface}} -o {{dr_fw_docker_interface}} -j BEFORE_DOCKER
+
+-F BEFORE_DOCKER
+
+{% endif %}
+
+COMMIT
+

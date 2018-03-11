@@ -1,0 +1,19 @@
+---
+galaxy_info:
+  author: Dmitry Rodin
+  description: Firewall management
+  company: Alcolytics
+  license: MIT
+  min_ansible_version: 2.2
+  platforms:
+  - name: Ubuntu
+    versions:
+    - xenial
+    - trusty
+  - name: Debian
+    versions:
+    - jessie
+    - wheezy
+  galaxy_tags:
+    - networking
+dependencies: []

@@ -1,0 +1,30 @@
+*filter
+
+
+### Control global access to exposed docker ports
+
+{% if dr_fw_docker_iptfix_apply|default(false) == true %}
+
+:BEFORE_DOCKER - [0:0]
+-I FORWARD -i {{dr_fw_main_interface}} -o {{dr_fw_docker_interface}} -j BEFORE_DOCKER
+
+-A BEFORE_DOCKER -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+
+{% for rule in dr_fw_docker_iptfix %}
+
+-A BEFORE_DOCKER
+{%- if rule.from_ip is defined %} -s {{rule.from_ip}} {% endif -%}
+{%- if rule.to_ip is defined %} -d {{rule.to_ip}} {% endif -%}
+{%- if rule.to_port is defined %} -p {{rule.proto}} -m {{rule.proto}} --dport {{rule.to_port}} {% endif -%}
+{%- if rule.rule|default('allow') == 'allow' %} -j ACCEPT {% else %} -j DROP {% endif %}
+{% endfor %}
+
+# allow ip example: -A BEFORE_DOCKER -s 82.202.204.194/32 -j ACCEPT
+# allow to port example: -I BEFORE_DOCKER -p tcp -m tcp --dport 10880 -j ACCEPT
+
+#drop others packets to docker containers
+-A BEFORE_DOCKER -j DROP
+{% endif %}
+
+COMMIT
+

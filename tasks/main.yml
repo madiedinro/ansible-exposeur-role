@@ -1,0 +1,39 @@
+---
+
+- name: Creating config dir
+  file:
+    path: '{{dr_fw_config_dir}}'
+    state: directory
+    mode: 0600
+  become: yes
+
+- name: Templating iptables start rules
+  template:
+   src: start_rules.j2
+   dest: '{{dr_fw_start_file}}'
+   mode: 0600
+  become: yes
+
+- name: Templating iptables stop rules
+  template:
+   src: stop_rules.j2
+   dest: '{{dr_fw_stop_file}}'
+   mode: 0600
+  become: yes
+
+- name: Add systemd Script
+  template:
+   src: systemd.j2
+   dest: '/lib/systemd/system/{{dr_fw_service_name}}.service'
+  become: yes
+
+- name: Force systemd to reread configs
+  systemd: daemon_reload=yes
+  become: yes
+
+- name: Enabling and restarting systemd service
+  systemd:
+    name: '{{dr_fw_service_name}}.service'
+    state: restarted
+    enabled: yes
+  become: yes

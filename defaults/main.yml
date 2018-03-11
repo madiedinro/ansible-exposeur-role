@@ -1,0 +1,13 @@
+---
+dr_fw_service_name: dr-iptables
+dr_fw_config_dir: /etc/dr-iptables
+dr_fw_start_file: '{{dr_fw_config_dir}}/start_rules'
+dr_fw_stop_file: '{{dr_fw_config_dir}}/stop_rules'
+dr_fw_bin: /sbin/iptables-restore
+dr_fw_start_cmd: '{{ dr_fw_bin }} -n {{dr_fw_start_file}}'
+dr_fw_stop_cmd: '{{ dr_fw_bin }} -n {{dr_fw_stop_file}}'
+
+dr_fw_docker_iptfix_apply: false
+dr_fw_docker_iptfix: []
+dr_fw_docker_interface: docker0
+dr_fw_main_interface: '{{ansible_default_ipv4.alias}}'
