@@ -2,6 +2,12 @@
 - name: Installing UFW
   apt: name=ufw state=present update_cache=yes
 
+
+- name: Resetting ufw
+  ufw:
+    state: reset
+  when: expo_reset_ufw == True
+
 - name: Configuring UFW rules
   ufw:
     from_ip: '{{ item.from_ip|default(omit) }}'
@@ -9,7 +15,7 @@
     to_port: '{{ item.to_port|default(omit) }}'
     proto: '{{ item.proto|default(omit) }}'
     rule: '{{ item.rule|default("allow") }}'
-  with_items: '{{ expo_rules + expo_rules_custom }}'
+  with_items: '{{ expo_rules_default + expo_rules }}'
 
 - name: Starting UFW
   ufw: state=enabled

@@ -12,10 +12,11 @@ expo_docker_iptfix: []
 expo_docker_interface: docker0
 expo_main_interface: '{{ansible_default_ipv4.alias}}'
 
+expo_reset_ufw: false
 expo_setup_ufw: true
 
 expo_rules_custom: []
-expo_rules:
+expo_rules_default:
   - { to_port: '22', proto: 'tcp'}
 
 expo_policies:
