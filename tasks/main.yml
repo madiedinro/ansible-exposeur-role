@@ -1,8 +1,11 @@
 ---
+- import_tasks: ufw.yml
+  when: expo_setup_ufw == True
+  tags: ['ufw']
 
 - name: Creating config dir
   file:
-    path: '{{dr_fw_config_dir}}'
+    path: '{{expo_config_dir}}'
     state: directory
     mode: 0600
   become: yes
@@ -10,21 +13,21 @@
 - name: Templating iptables start rules
   template:
    src: start_rules.j2
-   dest: '{{dr_fw_start_file}}'
+   dest: '{{expo_start_file}}'
    mode: 0600
   become: yes
 
 - name: Templating iptables stop rules
   template:
    src: stop_rules.j2
-   dest: '{{dr_fw_stop_file}}'
+   dest: '{{expo_stop_file}}'
    mode: 0600
   become: yes
 
 - name: Add systemd Script
   template:
    src: systemd.j2
-   dest: '/lib/systemd/system/{{dr_fw_service_name}}.service'
+   dest: '/lib/systemd/system/{{expo_service_name}}.service'
   become: yes
 
 - name: Force systemd to reread configs
@@ -33,7 +36,7 @@
 
 - name: Enabling and restarting systemd service
   systemd:
-    name: '{{dr_fw_service_name}}.service'
+    name: '{{expo_service_name}}.service'
     state: restarted
     enabled: yes
   become: yes

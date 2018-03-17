@@ -1,13 +1,25 @@
 ---
-dr_fw_service_name: dr-iptables
-dr_fw_config_dir: /etc/dr-iptables
-dr_fw_start_file: '{{dr_fw_config_dir}}/start_rules'
-dr_fw_stop_file: '{{dr_fw_config_dir}}/stop_rules'
-dr_fw_bin: /sbin/iptables-restore
-dr_fw_start_cmd: '{{ dr_fw_bin }} -n {{dr_fw_start_file}}'
-dr_fw_stop_cmd: '{{ dr_fw_bin }} -n {{dr_fw_stop_file}}'
+expo_service_name: dr-iptables
+expo_config_dir: /etc/dr-iptables
+expo_start_file: '{{expo_config_dir}}/start_rules'
+expo_stop_file: '{{expo_config_dir}}/stop_rules'
+expo_bin: /sbin/iptables-restore
+expo_start_cmd: '{{ expo_bin }} -n {{expo_start_file}}'
+expo_stop_cmd: '{{ expo_bin }} -n {{expo_stop_file}}'
 
-dr_fw_docker_iptfix_apply: false
-dr_fw_docker_iptfix: []
-dr_fw_docker_interface: docker0
-dr_fw_main_interface: '{{ansible_default_ipv4.alias}}'
+expo_docker_iptfix_apply: false
+expo_docker_iptfix: []
+expo_docker_interface: docker0
+expo_main_interface: '{{ansible_default_ipv4.alias}}'
+
+expo_setup_ufw: true
+
+expo_rules_custom: []
+expo_rules:
+  - { to_port: '22', proto: 'tcp'}
+
+expo_policies:
+  - { direction: 'incoming', policy: 'deny' }
+  - { direction: 'outgoing', policy: 'allow' }
+  - { direction: 'routed', policy: 'deny' }
+

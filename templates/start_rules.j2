@@ -1,16 +1,15 @@
 *filter
 
+{% if expo_docker_iptfix_apply|default(false) == true %}
 
 ### Control global access to exposed docker ports
 
-{% if dr_fw_docker_iptfix_apply|default(false) == true %}
-
 :BEFORE_DOCKER - [0:0]
--I FORWARD -i {{dr_fw_main_interface}} -o {{dr_fw_docker_interface}} -j BEFORE_DOCKER
+-I FORWARD -i {{expo_main_interface}} -o {{expo_docker_interface}} -j BEFORE_DOCKER
 
 -A BEFORE_DOCKER -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 
-{% for rule in dr_fw_docker_iptfix %}
+{% for rule in expo_docker_iptfix %}
 
 -A BEFORE_DOCKER
 {%- if rule.from_ip is defined %} -s {{rule.from_ip}} {% endif -%}

@@ -1,19 +1,19 @@
-# /lib/systemd/system/{{dr_fw_service_name}}.service
+# /lib/systemd/system/{{expo_service_name}}.service
 [Unit]
 Description=Additional iptables rules for docker
-ConditionPathExists={{dr_fw_start_file}}
-ConditionPathExists={{dr_fw_stop_file}}
+ConditionPathExists={{expo_start_file}}
+ConditionPathExists={{expo_stop_file}}
 Requires=docker.service
 After=docker.service
 
 [Service]
 Type=oneshot
-ExecStart={{dr_fw_start_cmd}}
-ExecStop={{dr_fw_stop_cmd}}
+ExecStart={{expo_start_cmd}}
+ExecStop={{expo_stop_cmd}}
 RemainAfterExit=yes
 
 
 [Install]
 WantedBy=multi-user.target
-Alias={{dr_fw_service_name}}.service
+Alias={{expo_service_name}}.service
 
