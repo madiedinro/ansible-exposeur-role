@@ -1,3 +1,10 @@
+*nat
+
+-F EXPOSEUR 
+-D PREROUTING -i {{expo_main_int}} -d {{expo_main_ip}} -j EXPOSEUR
+
+COMMIT
+
 *filter
 
 {% if expo_docker_iptfix_apply|default(false) == true %}
@@ -5,7 +12,6 @@
 :BEFORE_DOCKER - [0:0]
 
 -D FORWARD -i {{expo_main_interface}} -o {{expo_docker_interface}} -j BEFORE_DOCKER
-
 -F BEFORE_DOCKER
 
 {% endif %}

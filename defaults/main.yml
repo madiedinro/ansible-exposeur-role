@@ -7,15 +7,22 @@ expo_bin: /sbin/iptables-restore
 expo_start_cmd: '{{ expo_bin }} -n {{expo_start_file}}'
 expo_stop_cmd: '{{ expo_bin }} -n {{expo_stop_file}}'
 
-expo_docker_iptfix_apply: false
-expo_docker_iptfix: []
-expo_docker_interface: docker0
-expo_main_interface: '{{ansible_default_ipv4.alias}}'
-
 expo_reset_ufw: false
 expo_setup_ufw: true
+expo_dockiptfix_apply: false
+expo_dockiptfix_rules: []
+#  - { from_ip: '{{rodin_vpn}}'}
+#  - { from_ip: '{{office_ip}}'}
 
-expo_rules_custom: []
+expo_docker_interface: docker0
+expo_main_int: '{{ansible_default_ipv4.alias}}'
+expo_main_ip: '{{ansible_default_ipv4.address}}'
+
+expo_expose_rules: []
+#  - { chain: 'nat|PREROUTING', in_i: '{{expo_main_int}}', from_ip: '{{rodin_vpn}}', to_ip: '{{expo_main_ip}}', to_port: 25, rule: 'dnat', to_dest: '172.16.25.1' }
+
+
+expo_rules: []
 expo_rules_default:
   - { to_port: '22', proto: 'tcp'}
 

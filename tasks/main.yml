@@ -4,40 +4,8 @@
   when: expo_setup_ufw == True
   tags: ['ufw']
 
-- name: Creating config dir
-  file:
-    path: '{{expo_config_dir}}'
-    state: directory
-    mode: 0600
-  become: yes
+- import_tasks: iptfix.yml
+  when: expo_dockiptfix_apply == True or expo_expose_rules|length > 0
+  tags: ['iptfix']
+  
 
-- name: Templating iptables start rules
-  template:
-   src: start_rules.j2
-   dest: '{{expo_start_file}}'
-   mode: 0600
-  become: yes
-
-- name: Templating iptables stop rules
-  template:
-   src: stop_rules.j2
-   dest: '{{expo_stop_file}}'
-   mode: 0600
-  become: yes
-
-- name: Add systemd Script
-  template:
-   src: systemd.j2
-   dest: '/lib/systemd/system/{{expo_service_name}}.service'
-  become: yes
-
-- name: Force systemd to reread configs
-  systemd: daemon_reload=yes
-  become: yes
-
-- name: Enabling and restarting systemd service
-  systemd:
-    name: '{{expo_service_name}}.service'
-    state: restarted
-    enabled: yes
-  become: yes

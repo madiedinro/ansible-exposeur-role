@@ -1,15 +1,33 @@
-*filter
+*nat
+:EXPOSEUR - [0:0]
 
-{% if expo_docker_iptfix_apply|default(false) == true %}
+# examples sudo -A PREROUTING -s 666.666.666.666/32 -i eth0 -p tcp -m tcp --dport 8888 -j DNAT --to-destination 172.16.25.1:8888
+
+{% for rule in expo_expose_rules %}
+{% if rule.rule == 'dnat' %}
+-A EXPOSEUR 
+{%- if rule.from_ip is defined %} -s {{rule.from_ip}} {% endif -%}
+-p {{rule.proto|default('tcp')}} -m {{rule.proto|default('tcp')}} --dport {{rule.to_port}} -j DNAT --to-destination {{rule.new_dest}}
+{% endif %}
+{% endfor %}
+
+-A EXPOSEUR -j RETURN
+-I PREROUTING -i {{expo_main_int}} -d {{expo_main_ip}} -j EXPOSEUR
+
+COMMIT
+
+*filter
 
 ### Control global access to exposed docker ports
 
-:BEFORE_DOCKER - [0:0]
--I FORWARD -i {{expo_main_interface}} -o {{expo_docker_interface}} -j BEFORE_DOCKER
+{% if expo_dockiptfix_apply|default(false) == true %}
 
+-I FORWARD -i {{expo_main_int}} -o {{expo_docker_interface}} -j BEFORE_DOCKER
+
+:BEFORE_DOCKER - [0:0]
 -A BEFORE_DOCKER -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
 
-{% for rule in expo_docker_iptfix %}
+{% for rule in expo_dockiptfix_rules %}
 
 -A BEFORE_DOCKER
 {%- if rule.from_ip is defined %} -s {{rule.from_ip}} {% endif -%}
@@ -23,6 +41,7 @@
 
 #drop others packets to docker containers
 -A BEFORE_DOCKER -j DROP
+
 {% endif %}
 
 COMMIT
