@@ -22,8 +22,12 @@ COMMIT
 
 {% if expo_dockiptfix_apply|default(false) == true %}
 
+# new chain that catches all incoming traffic to docker interface, e
 :BEFORE_DOCKER - [0:0]
+# rule that allow packets at established connections
 -A BEFORE_DOCKER -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+# turn packets to new chain
+-I FORWARD -i {{expo_main_int}} -o {{expo_docker_interface}} -j BEFORE_DOCKER
 
 {% for rule in expo_dockiptfix_rules %}
 
@@ -40,7 +44,6 @@ COMMIT
 #drop others packets to docker containers
 -A BEFORE_DOCKER -j DROP
 
--I FORWARD -i {{expo_main_int}} -o {{expo_docker_interface}} -j BEFORE_DOCKER
 
 {% endif %}
 
