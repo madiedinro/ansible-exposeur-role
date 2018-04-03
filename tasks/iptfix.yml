@@ -13,19 +13,23 @@
    src: start_rules.j2
    dest: '{{expo_start_file}}'
    mode: 0600
+   force: yes
   become: yes
+  tags: ['iptfix_scripts']
 
 - name: Templating iptfix stop rules
   template:
    src: stop_rules.j2
    dest: '{{expo_stop_file}}'
    mode: 0600
+   force: yes
   become: yes
 
 - name: Add systemd Script
   template:
    src: systemd.j2
    dest: '/lib/systemd/system/{{expo_service_name}}.service'
+   force: yes
   become: yes
 
 - name: Force systemd to reread configs

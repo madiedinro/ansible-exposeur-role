@@ -1,6 +1,6 @@
 ---
 - name: Installing UFW
-  apt: name=ufw state=present update_cache=yes
+  apt: name=ufw state=present update_cache=yes install_recommends=no
 
 
 - name: Resetting ufw
