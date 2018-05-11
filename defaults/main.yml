@@ -7,9 +7,10 @@ expo_bin: /sbin/iptables-restore
 expo_start_cmd: '{{ expo_bin }} -n {{expo_start_file}}'
 expo_stop_cmd: '{{ expo_bin }} -n {{expo_stop_file}}'
 
-expo_reset_ufw: false
-expo_setup_ufw: true
-expo_dockiptfix_apply: false
+expo_reset_ufw: no
+expo_setup_ufw: yes
+expo_limit_ssh: yes
+expo_dockiptfix_apply: no
 expo_dockiptfix_rules: []
 #  - { from_ip: '{{rodin_vpn}}'}
 #  - { from_ip: '{{office_ip}}'}
@@ -23,7 +24,7 @@ expo_expose_rules: []
 #  - { chain: 'nat|PREROUTING', in_i: '{{expo_main_int}}', from_ip: '{{rodin_vpn}}', to_ip: '{{expo_main_ip}}', to_port: 25, rule: 'dnat', to_dest: '172.16.25.1' }
 
 expo_rules_default:
-  - { to_port: '22', proto: 'tcp'}
+  - { to_port: '22', proto: 'tcp', rule: "{{expo_limit_ssh|ternary('limit', 'allow')}}"}
 
 expo_policies:
   - { direction: 'incoming', policy: 'deny' }

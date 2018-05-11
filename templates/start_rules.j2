@@ -6,8 +6,9 @@
 {% for rule in expo_expose_rules %}
 {% if rule.rule == 'dnat' %}
 -A EXPOSEUR 
-{%- if rule.from_ip is defined %} -s {{rule.from_ip}} {% endif -%}
--p {{rule.proto|default('tcp')}} -m {{rule.proto|default('tcp')}} --dport {{rule.to_port}} -j DNAT --to-destination {{rule.new_dest}}
+{%- if rule.from_ip is defined %} -s {{rule.from_ip}}{% endif %}
+{{-' -p '}}{{rule.proto|default('tcp')}}
+{{-' -m '}}{{rule.proto|default('tcp')}} --dport {{rule.to_port}} -j DNAT --to-destination {{rule.new_dest}}
 {% endif %}
 {% endfor %}
 
