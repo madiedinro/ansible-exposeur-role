@@ -1,1 +1,11 @@
 ---
+expo_start_file: '{{expo_config_dir}}/start_rules'
+expo_stop_file: '{{expo_config_dir}}/stop_rules'
+expo_start_cmd: '{{ expo_bin }} -n {{expo_start_file}}'
+expo_stop_cmd: '{{ expo_bin }} -n {{expo_stop_file}}'
+        expo_bin: /sbin/iptables-restore
+
+
+
+          expo_rules_default:
+        - { to_port: '22', proto: 'tcp', rule: "{{expo_limit_ssh|ternary('limit', 'allow')}}"}
