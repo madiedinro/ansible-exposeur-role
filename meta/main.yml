@@ -2,7 +2,7 @@
 galaxy_info:
   author: Dmitry Rodin
   description: Ufw management with iptables fixes for docker exposing limitations
-  company: Alcolytics
+  company: Rodin co
   license: MIT
   min_ansible_version: 2.4
   platforms:
