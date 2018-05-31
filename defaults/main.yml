@@ -21,6 +21,9 @@ expo_main_ip: '{{ansible_default_ipv4.address}}'
 
 expo_rules: []
 expo_expose_rules: []
+expo_exposed_ips: []
+expo_exposed_ips_default: ['{{expo_main_ip}}']
+
 #  - { chain: 'nat|PREROUTING', in_i: '{{expo_main_int}}', from_ip: '{{rodin_vpn}}', to_ip: '{{expo_main_ip}}', to_port: 25, rule: 'dnat', to_dest: '172.16.25.1' }
 
 expo_rules_default:

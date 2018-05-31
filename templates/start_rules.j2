@@ -13,7 +13,10 @@
 {% endfor %}
 
 -A EXPOSEUR -j RETURN
--I PREROUTING -i {{expo_main_int}} -d {{expo_main_ip}} -j EXPOSEUR
+
+{% for ip in expo_exposed_ips + expo_exposed_ips_default %}
+-I PREROUTING -d {{ip}} -j EXPOSEUR
+{% endfor %}
 
 COMMIT
 

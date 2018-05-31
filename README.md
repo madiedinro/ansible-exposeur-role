@@ -30,8 +30,10 @@ Add to ansible playbook following:
         # Use this list to define exposing services that listed on ingernal interface.
         # It generates DNAT rules for indicaged directions
         expo_expose_rules: []
-        # example
+        # example default values: chain: 'nat|PREROUTING' ;  in_i: '{{expo_main_int}}'; rule: 'dnat'
         #  - { chain: 'nat|PREROUTING', in_i: '{{expo_main_int}}', from_ip: '{{rodin_vpn}}', to_ip: '{{expo_main_ip}}', to_port: 25, rule: 'dnat', to_dest: '172.16.25.1' }
+        # By default exposer handles only main system interface, you can add additinal by passing ip adds
+        expo_exposed_ips: ['123.23.23.11']
         # Set ufw policies
         expo_policies:
         - { direction: 'incoming', policy: 'deny' }
