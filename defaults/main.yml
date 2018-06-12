@@ -1,6 +1,8 @@
 ---
-expo_service_name: dr-iptables
-expo_config_dir: /etc/dr-iptables
+expo_service_name: exposeur
+expo_config_dir: /etc/exposeur
+rm_expo_service_name: dr-iptables
+rm_expo_config_dir: /etc/dr-iptables
 expo_start_file: '{{expo_config_dir}}/start_rules'
 expo_stop_file: '{{expo_config_dir}}/stop_rules'
 expo_bin: /sbin/iptables-restore

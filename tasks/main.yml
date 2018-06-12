@@ -5,7 +5,7 @@
   tags: ['ufw']
 
 - import_tasks: iptfix.yml
-  when: expo_setup_ufw == True and (expo_dockiptfix_apply == True or expo_expose_rules|length > 0)
+  when: expo_setup_ufw == True and (expo_dockiptfix_rules|length > 0 or expo_expose_rules|length > 0) # and (expo_dockiptfix_apply == True or expo_expose_rules.length > 0)
   tags: ['iptfix']
   
 

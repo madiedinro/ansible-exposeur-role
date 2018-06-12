@@ -25,12 +25,28 @@
    force: yes
   become: yes
 
+- name: Disabling old service
+  systemd:
+    name: '{{rm_expo_service_name}}.service'
+    enabled: no
+    masked: yes
+    state: stopped
+  ignore_errors: yes
+  become: yes
+
+- name: Removing old conf dir
+  file:
+    path: "{{rm_expo_service_name}}"
+    state: absent
+  ignore_errors: yes
+
 - name: Add systemd Script
   template:
    src: systemd.j2
    dest: '/lib/systemd/system/{{expo_service_name}}.service'
    force: yes
   become: yes
+  ignore_errors: yes
 
 - name: Force systemd to reread configs
   systemd: daemon_reload=yes
